@@ -9,4 +9,9 @@ include_directories(
 
 add_executable(my_libs
     shawn/test/main.cpp
+    shawn/STime.hpp
+    shawn/SVector.hpp
+    shawn/SJerk.hpp
+    shawn/SPoints.hpp
+    shawn/SThreePointsCurvature.hpp
 )
