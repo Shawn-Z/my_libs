@@ -17,13 +17,10 @@ namespace shawn {
 
     class SHandle {
     public:
-        handle reserve_handle;
-
         SHandle() {
             this->id_set.clear();
             this->handle_set.clear();
             this->description_set.clear();
-            this->reserve_handle.id = SIZE_MAX;
         }
 
         handle newHandle(std::string p_handle_description = "none") {
