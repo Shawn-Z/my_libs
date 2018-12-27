@@ -15,7 +15,7 @@ add_executable(my_libs
     shawn/SPoints.hpp
     shawn/SThreePointsCurvature.hpp
     shawn/SHandle.hpp
-    shawn/SLog.hpp)
+    shawn/SLog.hpp shawn/SProportion.hpp)
 
 target_link_libraries(my_libs
     glog

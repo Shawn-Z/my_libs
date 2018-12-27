@@ -11,6 +11,12 @@ namespace shawn {
     class handle {
     public:
         friend class SHandle;
+        inline void setID(size_t p_ID) {
+            this->id = p_ID;
+        }
+        inline size_t getID() {
+            return id;
+        }
     private:
         size_t id;
     };

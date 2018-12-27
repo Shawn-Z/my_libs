@@ -3,6 +3,7 @@
 #include "SJerk.hpp"
 #include "SHandle.hpp"
 #include "SLog.hpp"
+#include "SProportion.hpp"
 
 
 #include <iostream>
@@ -23,17 +24,23 @@ void fun(std::vector<double> * p) {
 
 
 int main() {
-    shawn::SHandle sHandle;
-    shawn::SLog sLog;
-    sLog.init("haha");
-    uint8_t dta[3] = {1,2,3};
-    std::cout<< sizeof(dta)<<std::endl;
-    sLog.logUint8Array((char *) dta, sizeof(dta), google::INFO);
-    sLog.logUint8Array((char *) dta, sizeof(dta), google::INFO);
-    sLog.logUint8Array((char *) dta, sizeof(dta), google::INFO);
-    sLog.logUint8Array((char *) dta, sizeof(dta), google::INFO);
-    sLog.logUint8Array((char *) dta, sizeof(dta), google::INFO);
-    sLog.logUint8Array((char *) dta, sizeof(dta), google::INFO);
+    shawn::SProportion sProportion;
+    sProportion.inputProportion(1,1);
+    uint8_t aa[3];
+    std::cout<< sizeof(aa);
+
+
+//    shawn::SHandle sHandle;
+//    shawn::SLog sLog;
+//    sLog.init("haha");
+//    uint8_t dta[3] = {1,2,3};
+//    std::cout<< sizeof(dta)<<std::endl;
+//    sLog.logUint8Array((char *) dta, sizeof(dta), google::INFO);
+//    sLog.logUint8Array((char *) dta, sizeof(dta), google::INFO);
+//    sLog.logUint8Array((char *) dta, sizeof(dta), google::INFO);
+//    sLog.logUint8Array((char *) dta, sizeof(dta), google::INFO);
+//    sLog.logUint8Array((char *) dta, sizeof(dta), google::INFO);
+//    sLog.logUint8Array((char *) dta, sizeof(dta), google::INFO);
 
 //    sHandle.setID(100);
 

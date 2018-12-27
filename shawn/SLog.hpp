@@ -15,8 +15,8 @@
 namespace shawn {
     class SLog {
     public:
-        void init(const char* p_name, std::string p_folder = "log_dir", google::LogSeverity p_stderr_severity = google::ERROR) {
-            google::InitGoogleLogging(p_name);
+        void init(std::string p_name, std::string p_folder = "log_dir", google::LogSeverity p_stderr_severity = google::ERROR) {
+            google::InitGoogleLogging(p_name.c_str());
             std::string folder = getenv("HOME");
             folder += "/";
             folder += p_folder;
