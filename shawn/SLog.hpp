@@ -8,6 +8,7 @@
 #include <string>
 #include <glog/logging.h>
 #include <iostream>
+#include <iomanip>
 #include <unistd.h>
 #include <sys/stat.h>
 
@@ -26,6 +27,42 @@ namespace shawn {
             }
             FLAGS_log_dir = folder;
             google::SetStderrLogging(p_stderr_severity);
+        }
+
+        void logUint8Array(char *p_array, size_t p_array_size, google::LogSeverity p_log_severity) {
+            std::vector<uint8_t> log_data(p_array, p_array + p_array_size);
+            this->logUint8Vector(log_data, p_log_severity);
+        }
+
+        void logUint8Vector(std::vector<uint8_t> &p_log_data, google::LogSeverity p_log_severity) {
+            if (p_log_severity == google::INFO) {
+                auto&& log = COMPACT_GOOGLE_LOG_INFO;
+                log.stream() << "string array data: 0x";
+                for(int cell: p_log_data) {
+                    log.stream() << " " << std::setfill('0') << std::setw(2) << std::hex << cell;
+                }
+            }
+            if (p_log_severity == google::WARNING) {
+                auto&& log = COMPACT_GOOGLE_LOG_WARNING;
+                log.stream() << "string array data: 0x";
+                for(int cell: p_log_data) {
+                    log.stream() << " " << std::setfill('0') << std::setw(2) << std::hex << cell;
+                }
+            }
+            if (p_log_severity == google::ERROR) {
+                auto&& log = COMPACT_GOOGLE_LOG_ERROR;
+                log.stream() << "string array data: 0x";
+                for(int cell: p_log_data) {
+                    log.stream() << " " << std::setfill('0') << std::setw(2) << std::hex << cell;
+                }
+            }
+            if (p_log_severity == google::FATAL) {
+                auto&& log = COMPACT_GOOGLE_LOG_FATAL;
+                log.stream() << "string array data: 0x";
+                for(int cell: p_log_data) {
+                    log.stream() << " " << std::setfill('0') << std::setw(2) << std::hex << cell;
+                }
+            }
         }
     };
 }

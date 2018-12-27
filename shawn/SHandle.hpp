@@ -52,6 +52,13 @@ namespace shawn {
             return (p_handle.id <= this->id_set.back());
         }
 
+        bool getHandle(size_t p_ID, handle &p_handle) {
+            if (p_ID > this->id_set.back()) {
+                return false;
+            }
+            p_handle = this->handle_set[p_ID];
+        }
+
     private:
         std::vector<size_t> id_set;
         std::vector<handle> handle_set;
