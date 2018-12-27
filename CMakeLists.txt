@@ -14,4 +14,9 @@ add_executable(my_libs
     shawn/SJerk.hpp
     shawn/SPoints.hpp
     shawn/SThreePointsCurvature.hpp
+    shawn/SHandle.hpp
+    shawn/SLog.hpp)
+
+target_link_libraries(my_libs
+    glog
 )

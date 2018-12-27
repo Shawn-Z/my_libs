@@ -21,6 +21,13 @@ public:
         }
     }
 
+    template <typename T1>
+    void unifySize(std::vector<T1> &p_vector1, size_t p_size) {
+        if (p_vector1.size() < p_size) {
+            p_vector1.resize(p_size);
+        }
+    }
+
     template <typename T1, typename T2>
     bool checkSizeSame(std::vector<T1> &p_vector1, std::vector<T2> &p_vector2) {
         return (p_vector1.size() == p_vector2.size());

@@ -1,6 +1,8 @@
 #include "SVector.hpp"
 #include "STime.hpp"
 #include "SJerk.hpp"
+#include "SHandle.hpp"
+#include "SLog.hpp"
 
 
 #include <iostream>
@@ -17,7 +19,16 @@ void fun(std::vector<double> * p) {
 }
 
 
+
+
+
 int main() {
+    shawn::SHandle sHandle;
+    shawn::SLog sLog;
+    sLog.init("haha");
+//    sHandle.setID(100);
+
+
 //    std::vector<double> a{1, 2, 3, 4};
 //    std::cout<<a.size()<<std::endl;
 //    fun(&a);
@@ -31,16 +42,16 @@ int main() {
 //    shawn::SJerk sJerk;
 
 
-    shawn::STime sTime;
-    sTime.updateTimestampsTillNow();
-    sTime.updateTimestampsTillNow();
-    sTime.updateTimestampsTillNow();
-    sTime.updateTimestampsTillNow();
-    sTime.updateTimestampsTillNow();
-    sTime.updateTimestampsTillNow();
-    sTime.updateTimestampsTillNow();
-    sTime.updateTimestampsTillNow();
-    sTime.updateTimestampsTillNow();
+//    shawn::STime sTime;
+//    sTime.updateTimestampsTillNow();
+//    sTime.updateTimestampsTillNow();
+//    sTime.updateTimestampsTillNow();
+//    sTime.updateTimestampsTillNow();
+//    sTime.updateTimestampsTillNow();
+//    sTime.updateTimestampsTillNow();
+//    sTime.updateTimestampsTillNow();
+//    sTime.updateTimestampsTillNow();
+//    sTime.updateTimestampsTillNow();
 
     return 0;
 }

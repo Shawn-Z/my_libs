@@ -5,6 +5,7 @@
 #include <vector>
 #include <ctime>
 #include <stdint.h>
+#include <stdlib.h>
 #include <SVector.hpp>
 #include <iostream>
 
