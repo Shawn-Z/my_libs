@@ -43,15 +43,15 @@ int main() {
 
 
 //    shawn::STime sTime;
-//    sTime.updateTimestampsTillNow();
-//    sTime.updateTimestampsTillNow();
-//    sTime.updateTimestampsTillNow();
-//    sTime.updateTimestampsTillNow();
-//    sTime.updateTimestampsTillNow();
-//    sTime.updateTimestampsTillNow();
-//    sTime.updateTimestampsTillNow();
-//    sTime.updateTimestampsTillNow();
-//    sTime.updateTimestampsTillNow();
+//    sTime.updateTimestampsTillNowMs();
+//    sTime.updateTimestampsTillNowMs();
+//    sTime.updateTimestampsTillNowMs();
+//    sTime.updateTimestampsTillNowMs();
+//    sTime.updateTimestampsTillNowMs();
+//    sTime.updateTimestampsTillNowMs();
+//    sTime.updateTimestampsTillNowMs();
+//    sTime.updateTimestampsTillNowMs();
+//    sTime.updateTimestampsTillNowMs();
 
     return 0;
 }
