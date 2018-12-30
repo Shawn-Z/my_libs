@@ -8,162 +8,183 @@
 
 namespace shawn {
 
-struct three_points_curvature_params {
-    double_t waist_length;
-    double_t concerned_curvature;
-};
-
 class SThreePointsCurvature {
 public:
-    std::vector<double_t> x_points;
-    std::vector<double_t> y_points;
-    std::vector<double_t> points_arc_lengths;
-    std::vector<double_t> points_intervals;
-
-    std::vector<double_t> former_x_points;
-    std::vector<double_t> former_y_points;
-
-    std::vector<double_t> latter_x_points;
-    std::vector<double_t> latter_y_points;
-
-    size_t points_size;
-
-    size_t start_index;
-    size_t end_index;
-
-    std::vector<double_t> curvatures;
-
-    double_t waist_length;
-    double_t concerned_curvature;
-
-    bool input_params(three_points_curvature_params p_params) {
-        if (p_params.waist_length <= 0) {
-            return false;
+    std::vector<std::vector<double_t>> findCurvatureCalculatePoints(const std::vector<double_t> &p_x_points,
+                                                                    const std::vector<double_t> &p_y_points,
+                                                                    const std::vector<double_t> &p_arc_lengths,
+                                                                    const std::vector<double_t> &p_intervals,
+                                                                    double_t p_waist_length,
+                                                                    size_t &p_p_start_index,
+                                                                    size_t &p_p_end_index) {
+        std::vector<std::vector<double_t>> retrieve;
+        retrieve.clear();
+        size_t points_size = p_x_points.size();
+        double_t total_length = p_arc_lengths.back();
+        if (points_size < 3) {
+            return retrieve;
         }
-        if (p_params.concerned_curvature <= 0) {
-            return false;
+        if (points_size != p_y_points.size()) {
+            return retrieve;
         }
-        this->waist_length = p_params.waist_length;
-        this->concerned_curvature = p_params.concerned_curvature;
-        return true;
-    }
-
-    bool input_points(const std::vector<double_t> p_x_points, const std::vector<double_t> p_y_points,
-                      const std::vector<double_t> p_points_arc_lengths, const std::vector<double_t> p_points_intervals) {
-        if (p_points_arc_lengths.back() < (2.0 * this->waist_length)) {
-            return false;
+        if (points_size != p_arc_lengths.size()) {
+            return retrieve;
         }
-        this->x_points.clear();
-        this->y_points.clear();
-        this->points_arc_lengths.clear();
-        this->x_points = p_x_points;
-        this->y_points = p_y_points;
-        this->points_arc_lengths = p_points_arc_lengths;
-        this->points_intervals = p_points_intervals;
-        this->points_size = this->x_points.size();
-        return true;
-    }
-
-    bool find_curvature_calculate_points() {
-        if (this->waist_length <= 0) {
-            return false;
+        if (points_size != p_intervals.size()) {
+            return retrieve;
+        }
+        if (p_waist_length <= 0) {
+            return retrieve;
+        }
+        if (total_length < 2.0 * p_waist_length) {
+            return retrieve;
         }
 
-        this->start_index = this->points_size;
-        this->end_index = 0;
-        double_t total_length = this->points_arc_lengths.back();
-        for (size_t i = 1; i < this->points_size; ++i) {
-            if (this->points_arc_lengths[i] > this->waist_length) {
-                this->start_index = i;
+        size_t start_index = points_size;
+        size_t end_index = 0;
+        for (size_t i = 1; i < points_size; ++i) {
+            if (p_arc_lengths[i] > p_waist_length) {
+                start_index = i;
                 break;
             }
         }
-        for (size_t j = this->points_size - 1; j >= 0; --j) {
-            if (total_length - this->points_arc_lengths[j] > this->waist_length) {
-                this->end_index = j;
+        for (size_t j = points_size - 1; j >= 0; --j) {
+            if (total_length - p_arc_lengths[j] > p_waist_length) {
+                end_index = j;
                 break;
             }
 
         }
-        if (this->start_index >= this->end_index) {
-            return false;
+        if (start_index >= end_index) {
+            return retrieve;
         }
 
         double_t tmp_ratio;
-        this->former_x_points.resize(this->points_size);
-        this->former_y_points.resize(this->points_size);
-        this->latter_x_points.resize(this->points_size);
-        this->latter_y_points.resize(this->points_size);
-        for (size_t k = this->start_index; k <= this->end_index; ++k) {
+        std::vector<double_t> former_x_points(points_size, 0);
+        std::vector<double_t> former_y_points(points_size, 0);
+        std::vector<double_t> latter_x_points(points_size, 0);
+        std::vector<double_t> latter_y_points(points_size, 0);
+        for (size_t k = start_index; k <= end_index; ++k) {
             for (size_t m = k - 1; m >= 0; --m) {
-                if (this->points_arc_lengths[k] - this->points_arc_lengths[m] > this->waist_length) {
-                    tmp_ratio = (this->points_arc_lengths[k] - this->points_arc_lengths[m] - this->waist_length) / this->points_intervals[m + 1];
-                    this->former_x_points[k] = this->x_points[m] + tmp_ratio * (this->x_points[m + 1] - this->x_points[m]);
-                    this->former_y_points[k] = this->y_points[m] + tmp_ratio * (this->y_points[m + 1] - this->y_points[m]);
+                if (p_arc_lengths[k] - p_arc_lengths[m] > p_waist_length) {
+                    tmp_ratio = (p_arc_lengths[k] - p_arc_lengths[m] - p_waist_length) / p_intervals[m + 1];
+                    former_x_points[k] = p_x_points[m] + tmp_ratio * (p_x_points[m + 1] - p_x_points[m]);
+                    former_y_points[k] = p_y_points[m] + tmp_ratio * (p_y_points[m + 1] - p_y_points[m]);
                     break;
                 }
             }
-            for (size_t n = k + 1; n < this->points_size; ++n) {
-                if (this->points_arc_lengths[n] - this->points_arc_lengths[k] > this->waist_length) {
-                    tmp_ratio = (this->waist_length - (this->points_arc_lengths[n - 1] - this->points_arc_lengths[k])) / this->points_intervals[n];
-                    this->latter_x_points[k] = this->x_points[n - 1] + tmp_ratio * (this->x_points[n] - this->x_points[n - 1]);
-                    this->latter_y_points[k] = this->y_points[n - 1] + tmp_ratio * (this->y_points[n] - this->y_points[n - 1]);
+            for (size_t n = k + 1; n < points_size; ++n) {
+                if (p_arc_lengths[n] - p_arc_lengths[k] > p_waist_length) {
+                    tmp_ratio = (p_waist_length - (p_arc_lengths[n - 1] - p_arc_lengths[k])) / p_intervals[n];
+                    latter_x_points[k] = p_x_points[n - 1] + tmp_ratio * (p_x_points[n] - p_x_points[n - 1]);
+                    latter_y_points[k] = p_y_points[n - 1] + tmp_ratio * (p_y_points[n] - p_y_points[n - 1]);
                     break;
                 }
             }
         }
-        return true;
+        retrieve.emplace_back(former_x_points);
+        retrieve.emplace_back(former_y_points);
+        retrieve.emplace_back(latter_x_points);
+        retrieve.emplace_back(latter_y_points);
+        p_p_start_index = start_index;
+        p_p_end_index = end_index;
+        return retrieve;
     }
 
-    double_t calculate_point_unsigned_curvature(size_t p_index) {
-        double_t bottom_length_square = pow((former_x_points[p_index] - latter_x_points[p_index]), 2.0) +
-                                        pow((former_y_points[p_index] - latter_y_points[p_index]), 2.0);
-        return 2 * sqrt(fabs(pow(this->waist_length, 2.0) - 0.25 * bottom_length_square)) / pow(this->waist_length, 2.0);
+    double_t calculatePointUnsignedCurvature(double_t p_former_x, double_t p_former_y,
+                                             double_t p_latter_x, double_t p_latter_y, double_t p_waist_length) {
+        double_t bottom_length_square = pow((p_former_x - p_latter_x), 2.0) + pow((p_former_y - p_latter_y), 2.0);
+        return 2 * sqrt(fabs(pow(p_waist_length, 2.0) - 0.25 * pow(bottom_length_square, 2.0))) / pow(p_waist_length, 2.0);
     }
 
-    void calculate_unsigned_curvatures() {
-        this->curvatures.resize(this->points_size);
-        for (size_t i = this->start_index; i <= this->end_index; ++i) {
-            this->curvatures[i] = calculate_point_unsigned_curvature(i);
+    std::vector<double_t> calculateUnsignedCurvatures(const std::vector<double_t> &p_x_points,
+                                                      const std::vector<double_t> &p_y_points,
+                                                      const std::vector<double_t> &p_arc_lengths,
+                                                      const std::vector<double_t> &p_intervals,
+                                                      double_t p_waist_length) {
+        std::vector<double_t> curvatures;
+        curvatures.clear();
+        std::vector<std::vector<double_t>> calculate_points;
+        size_t start_index;
+        size_t end_index;
+        calculate_points = findCurvatureCalculatePoints(p_x_points, p_y_points, p_arc_lengths, p_intervals,
+                                                        p_waist_length, start_index, end_index);
+        if (calculate_points.empty()) {
+            return curvatures;
         }
-        for (size_t j = 0; j < this->start_index; ++j) {
-            this->curvatures[j] = this->curvatures[this->start_index];
+        size_t points_size = p_x_points.size();
+        if (points_size < 3) {
+            return curvatures;
         }
-        for (size_t k = this->end_index + 1; k < this->points_size; ++k) {
-            this->curvatures[k] = this->curvatures[this->end_index];
+        curvatures.resize(points_size);
+        std::vector<double_t> &former_x_points = calculate_points[0];
+        std::vector<double_t> &former_y_points = calculate_points[1];
+        std::vector<double_t> &latter_x_points = calculate_points[2];
+        std::vector<double_t> &latter_y_points = calculate_points[3];
+        for (size_t i = start_index; i <= end_index; ++i) {
+            curvatures[i] = calculatePointUnsignedCurvature(former_x_points[i], former_y_points[i],
+                                                            latter_x_points[i], latter_y_points[i], p_waist_length);
+        }
+        for (size_t j = 0; j < start_index; ++j) {
+            curvatures[j] = curvatures[start_index];
+        }
+        for (size_t k = end_index + 1; k < points_size; ++k) {
+            curvatures[k] = curvatures[end_index];
         }
     }
 
-    void absolute_curvatures_limited(double_t p_max_unsigned_curvature) {
-        for (size_t i = 0; i < this->points_size; ++i) {
-            if (fabs(this->curvatures[i]) > p_max_unsigned_curvature) {
-                this->curvatures[i] = (this->curvatures[i] > 0? p_max_unsigned_curvature: (-p_max_unsigned_curvature));
-            }
+    void curvaturesReproduce(std::vector<double_t> &p_curvatures, double_t p_concerned_curvature) {
+        if (p_concerned_curvature <= 0) {
+            return;
         }
-    }
-
-    void curvatures_reproduce() {
         double_t tmp_max_curvature;
-        for (size_t i = 0; i < this->points_size; ++i) {
-            if (fabs(this->curvatures[i]) > this->concerned_curvature) {
+        size_t points_size = p_curvatures.size();
+        for (size_t i = 0; i < points_size; ++i) {
+            if (fabs(p_curvatures[i]) > p_concerned_curvature) {
                 tmp_max_curvature = 0;
-                for (size_t j = i; j < this->points_size; ++j) {
-                    if (fabs(this->curvatures[j]) <= this->concerned_curvature) {
+                for (size_t j = i; j < points_size; ++j) {
+                    if (fabs(p_curvatures[j]) <= p_concerned_curvature) {
                         break;
                     }
-                    if (tmp_max_curvature < fabs(this->curvatures[j])) {
-                        tmp_max_curvature = fabs(this->curvatures[j]);
+                    if (tmp_max_curvature < fabs(p_curvatures[j])) {
+                        tmp_max_curvature = fabs(p_curvatures[j]);
                     }
                     i = j;
                 }
                 for (size_t k = i; k >= 0; --k) {
-                    if (fabs(this->curvatures[k]) <= this->concerned_curvature) {
+                    if (fabs(p_curvatures[k]) <= p_concerned_curvature) {
                         break;
                     }
-                    this->curvatures[k] = tmp_max_curvature;
+                    p_curvatures[k] = tmp_max_curvature;
                 }
             }
         }
+    }
+
+    void absoluteCurvaturesLimited(std::vector<double_t> &p_curvatures, double_t p_max_unsigned_curvature) {
+        if (p_max_unsigned_curvature <= 0) {
+            return;
+        }
+        size_t points_size = p_curvatures.size();
+        for (size_t i = 0; i < points_size; ++i) {
+            if (fabs(p_curvatures[i]) > p_max_unsigned_curvature) {
+                p_curvatures[i] = (p_curvatures[i] > 0? p_max_unsigned_curvature: (-p_max_unsigned_curvature));
+            }
+        }
+    }
+
+    std::vector<double_t> speedPlanningCurvature(const std::vector<double_t> &p_x_points,
+                                                 const std::vector<double_t> &p_y_points,
+                                                 const std::vector<double_t> &p_arc_lengths,
+                                                 const std::vector<double_t> &p_intervals,
+                                                 double_t p_waist_length,
+                                                 double_t p_concerned_curvature,
+                                                 double_t p_max_unsigned_curvature) {
+        std::vector<double_t> curvatures;
+        curvatures = calculateUnsignedCurvatures(p_x_points, p_y_points, p_arc_lengths, p_intervals, p_waist_length);
+        curvaturesReproduce(curvatures, p_concerned_curvature);
+        absoluteCurvaturesLimited(curvatures, p_max_unsigned_curvature);
+        return curvatures;
     }
 };
 
