@@ -161,16 +161,17 @@ public:
      * @param p_a_max max acceleration, signed
      * @param p_a_min min acceleration, signed
      * @param p_a_end no more than zero, describe the deceleration of close to the end point
-     * @param v_begin_threshold determine if the speed curve can be generate
+     * @param p_v_begin_threshold determine if the speed curve can be generate
      * @param p_remove_dec while the speed of base point more than the speed of first point, limit max deceleration(min acceleration) or not
      * @param p_remove_dec_value no more than zero, if set @param p_remove_dec true, set the max deceleration(min acceleration) while condition satisfied
      * @param p_v_begin the first speed in the sequence, as the current speed
      * @return true if the speed curve can be generate
      */
     bool backward_pass_concave(std::vector<double_t> &p_v, std::vector<double_t> &p_interval,
-                       double_t p_jerk_max, double_t p_a_max, double_t p_a_min, double_t p_a_end, double_t v_begin_threshold,
+                       double_t p_jerk_max, double_t p_a_max, double_t p_a_min, double_t p_a_end, double_t p_v_begin_threshold,
                        bool p_remove_dec = false, double_t p_remove_dec_value = 0, double_t p_v_begin = 0) {
         p_jerk_max = fabs(p_jerk_max);
+        p_remove_dec_value = -fabs(p_remove_dec_value);
         size_t tmp_size = std::min(p_v.size(), p_interval.size());
         if (tmp_size < 3) {
             return false;
@@ -196,7 +197,7 @@ public:
         tmp_speed = calculate_previous_speed(p_v[1], tmp_acc, p_interval[1],
                                              p_jerk_max, p_a_max, p_a_min,
                                              false, p_remove_dec, p_remove_dec_value, p_v_begin);
-        return ((p_v[0] - tmp_speed) < fabs(v_begin_threshold));
+        return ((p_v[0] - tmp_speed) < fabs(p_v_begin_threshold));
     }
 
     /**
